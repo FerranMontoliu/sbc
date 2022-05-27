@@ -20,6 +20,7 @@ def parse_json_dataset(file_path: str) -> ([City], [Connection]):
                 connection['from_'] = connection.pop('from')
                 connections.append(Connection(**connection))
 
+            print("The dataset was parsed successfully.")
             return cities, connections
     except EnvironmentError:
         raise Exception(f"ERROR. No file found in '{file_path}'.")
