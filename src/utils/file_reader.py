@@ -7,7 +7,7 @@ from model.connection import Connection
 def parse_json_dataset(file_path: str) -> ([City], [Connection]):
     print(f"Reading file in '{file_path}'...")
     try:
-        with open(file_path, "r") as file:
+        with open(file_path, "r", encoding='utf-8') as file:
             info_dict = json.load(file)
 
             # Converting the cities to class
