@@ -5,8 +5,6 @@ from model.connection import Connection
 from utils.error_manager import check_data_validity
 from utils.file_reader import parse_json_dataset
 from utils.graph_printer import print_graph
-from algorithms.a import compute_a
-from algorithms.csp import compute_csp
 
 
 def compute(cities: [City], algorithm: str, from_city: str, to_city: str) -> ([City], float):
