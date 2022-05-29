@@ -1,5 +1,7 @@
 import sys
 
+from algorithms.a import compute_a
+from algorithms.csp import compute_csp
 from model.city import City
 from model.connection import Connection
 from utils.error_manager import check_data_validity
