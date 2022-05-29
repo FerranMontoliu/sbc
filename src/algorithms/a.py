@@ -1,11 +1,9 @@
 from model.annotated_city import AnnotatedCity
 from model.city import City
-from model.connection import Connection
 
 
 def compute_a(cities: [City], from_city_name: str, to_city_name: str, value_getter) -> ([City], float):
     node_list: [AnnotatedCity]
-    path: [City] = []
     acc_weight: float = 0
 
     # Get the origin city
@@ -14,33 +12,41 @@ def compute_a(cities: [City], from_city_name: str, to_city_name: str, value_gett
         if city.name == from_city_name:
             from_city = city
             break
-
-    current_city: City = from_city
-    node_list = [AnnotatedCity(current_city, [], 0)]
+    node_list = [AnnotatedCity(from_city, [], 0)]
 
     while node_list:
+        # Check if the city was not already visited. Discard otherwise
+        while len(node_list) > 0:
+            node = node_list.pop(0)
+            if not is_visited(node.path, node.city):
+                break
+        acc_weight = node.acc_weight
+
         # If the current node is the destination, finish
-        if current_city.name == to_city_name:
-            return path, acc_weight
+        if node.city.name == to_city_name:
+            return list_append(node.path, node.city), acc_weight
 
-        if current_city.connections:
-            current_city, weight = get_min_path_node(current_city.connections, cities, value_getter)
-            path.append(current_city)
-            acc_weight += weight
+        # Save all its connections for further checks
+        for connection in node.city.connections:
+            path_aux = node.path.copy()
+            node_list.append(
+                AnnotatedCity(cities[connection.to], list_append(path_aux, node.city),
+                              acc_weight + value_getter(connection)))
 
-    return path, acc_weight
+        # Sort list on every iteration to have an ordered list
+        node_list.sort(key=lambda x: x.acc_weight)
+    return None, None
 
 
-def get_min_path_node(connections: [Connection], cities: [City], value_getter) -> (City, float):
-    min_val: float = 0
-    min_connection: Connection | None = None
+# Check if the item is in the list or not
+def is_visited(lst, item) -> bool:
+    for city in lst:
+        if city == item:
+            return True
+    return False
 
-    for connection in connections:
-        connection_weight: float = value_getter(connection)
-        if min_val == 0 or connection_weight < min_val:
-            min_val = connection_weight
-            min_connection = connection
 
-    for city in cities:
-        if city.name == min_connection.to_name:
-            return city, min_val
+# Append element on the list and return the result
+def list_append(lst, item):
+    lst.append(item)
+    return lst
