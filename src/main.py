@@ -2,10 +2,7 @@ import sys
 
 from utils.error_manager import check_data_validity
 from utils.file_reader import parse_json_dataset
-from utils.graph_generator import compute_graph
 from utils.graph_printer import print_graph
-from algorithms.a import compute_a
-from algorithms.csp import compute_csp
 
 
 def main():

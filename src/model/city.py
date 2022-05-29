@@ -16,6 +16,3 @@ class City:
         self.latitude = latitude
         self.longitude = longitude
         self.connections = []
-
-    def append_connection(self, connection: Connection):
-        self.connections.append(connection)
