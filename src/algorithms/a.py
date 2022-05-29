@@ -1,10 +1,17 @@
+from typing import Callable
+
 from model.annotated_city import AnnotatedCity
 from model.city import City
+from model.connection import Connection
 
 
-def compute_a(cities: [City], from_city_name: str, to_city_name: str, value_getter) -> ([City], float):
+def compute_a(cities: [City],
+              from_city_name: str,
+              to_city_name: str,
+              value_getter: Callable[[Connection], float | int]) -> ([City], float):
     node_list: [AnnotatedCity]
     acc_weight: float = 0
+    node: AnnotatedCity | None = None
 
     # Get the origin city
     from_city: City | None = None
@@ -20,17 +27,19 @@ def compute_a(cities: [City], from_city_name: str, to_city_name: str, value_gett
             node = node_list.pop(0)
             if not is_visited(node.path, node.city):
                 break
-        acc_weight = node.acc_weight
+
+        if node:
+            acc_weight = node.acc_weight
 
         # If the current node is the destination, finish
         if node.city.name == to_city_name:
-            return list_append(node.path, node.city), acc_weight
+            return node.path + [node.city], acc_weight
 
         # Save all its connections for further checks
         for connection in node.city.connections:
             path_aux = node.path.copy()
             node_list.append(
-                AnnotatedCity(cities[connection.to], list_append(path_aux, node.city),
+                AnnotatedCity(cities[connection.to], path_aux + [node.city],
                               acc_weight + value_getter(connection)))
 
         # Sort list on every iteration to have an ordered list
@@ -39,14 +48,8 @@ def compute_a(cities: [City], from_city_name: str, to_city_name: str, value_gett
 
 
 # Check if the item is in the list or not
-def is_visited(lst, item) -> bool:
-    for city in lst:
-        if city == item:
+def is_visited(cities_list: [City], current_city: City) -> bool:
+    for city in cities_list:
+        if city == current_city:
             return True
     return False
-
-
-# Append element on the list and return the result
-def list_append(lst, item):
-    lst.append(item)
-    return lst

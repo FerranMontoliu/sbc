@@ -1,4 +1,5 @@
 import sys
+from typing import Literal, Callable
 
 from algorithms.a import compute_a
 from algorithms.csp import compute_csp
@@ -9,7 +10,23 @@ from utils.file_reader import parse_json_dataset
 from utils.graph_printer import print_graph
 
 
-def compute(cities: [City], algorithm: str, from_city: str, to_city: str) -> ([City], float):
+def compute(cities: [City],
+            algorithm: Literal['A*', 'CSP'],
+            from_city: str,
+            to_city: str,
+            heuristic_function: Callable[[Connection], float | int]) -> ([City], float):
+    if algorithm == 'A*':
+        path, acc_weight = compute_a(cities, from_city, to_city, heuristic_function)
+    elif algorithm == 'CSP':
+        path, acc_weight = compute_csp(cities, from_city, to_city, heuristic_function)
+    else:
+        raise Exception(f"ERROR. Invalid algorithm parameter: Must be 'A*' or 'CSP', but got {algorithm} instead.")
+    print(f"The best route found is:")
+    print([c.name for c in path])
+    print(f"With a cost of {acc_weight}")
+
+
+def main():
     def hf_distance(c: Connection) -> int:
         return c.distance
 
@@ -19,18 +36,6 @@ def compute(cities: [City], algorithm: str, from_city: str, to_city: str) -> ([C
     def hf_duration_distance(c: Connection) -> int:
         return c.duration * c.distance
 
-    if algorithm == 'A*':
-        path, acc_weight = compute_a(cities, from_city, to_city, hf_duration)
-    elif algorithm == 'CSP':
-        path, acc_weight = compute_csp(cities, from_city, to_city, hf_duration)
-    else:
-        raise Exception(f"ERROR. Invalid algorithm parameter: Must be 'A*' or 'CSP', but got {algorithm} instead.")
-    print(f"The best route found is:")
-    print([c.name for c in path])
-    print(f"With a cost of {acc_weight}")
-
-
-def main():
     args: [] = sys.argv[1:]
     num_args: int = len(args)
 
