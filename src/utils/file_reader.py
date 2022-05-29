@@ -15,12 +15,17 @@ def parse_json_dataset(file_path: str) -> ([City], [Connection]):
 
             # Converting the connections to class
             # With the connections we need to do a little hack because of the 'from' reserved word
-            connections: [Connection] = []
             for connection in info_dict['connections']:
-                connection['from_'] = connection.pop('from')
-                connections.append(Connection(**connection))
+                index_from = index_to = -1
+                for index, item in enumerate(cities):
+                    if item.name == connection['from']:
+                        index_from = index
+                    if item.name == connection['to']:
+                        index_to = index
+                cities.__getitem__(index_from).append_connection(
+                    Connection(index_to, connection['distance'], connection['duration']))
 
             print("The dataset was parsed successfully.")
-            return cities, connections
+            return cities
     except EnvironmentError:
         raise Exception(f"ERROR. No file found in '{file_path}'.")

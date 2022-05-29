@@ -14,9 +14,9 @@ def check_data_validity(cities: [City], from_city: str, to_city: str) -> None:
     from_found: bool = False
     to_found: bool = False
     for city in cities:
-        if city == from_city:
+        if city.name == from_city:
             from_found = True
-        elif city == to_city:
+        elif city.name == to_city:
             to_found = True
 
         if from_found and to_found:

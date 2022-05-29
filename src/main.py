@@ -4,26 +4,37 @@ from utils.error_manager import check_data_validity
 from utils.file_reader import parse_json_dataset
 from utils.graph_generator import compute_graph
 from utils.graph_printer import print_graph
+from algorithms.a import compute_a
+from algorithms.csp import compute_csp
 
 
 def main():
     args: [] = sys.argv[1:]
     num_args: int = len(args)
 
-    if num_args < 3:
-        raise Exception(f'ERROR. Invalid number of arguments: expected at least 3 but got {num_args} instead.')
+    if num_args < 4:
+        raise Exception(f'ERROR. Invalid number of arguments: expected at least 4 but got {num_args} instead.'.format(
+            num_args=num_args))
 
-    cities, connections = parse_json_dataset(args[0])
+    cities = parse_json_dataset(args[0])
 
-    if num_args == 4:
-        if args[3] == '--print-graph':
-            print_graph(connections)
+    if num_args == 5:
+        if args[4] == '--print-graph':
+            print_graph(cities)
         else:
             raise Exception(
-                f"ERROR. Invalid last parameter: expected '--print-tree' or nothing, but got '{args[1]}' instead.")
+                f"ERROR. Invalid last parameter: expected '--print-tree' or nothing, but got '{args[4]}' instead.")
 
-    cities = compute_graph(cities, connections)
     check_data_validity(cities, args[1], args[2])
+
+    if args[3] == 'A*':
+        print('None')
+        # compute_a(cities, args[3], args[1], args[2])
+    elif args[3] == 'CSP':
+        print('None')
+        # compute_csp(cities, args[3], args[1], args[2])
+    else:
+        raise Exception(f"ERROR. Invalid algorithm parameter: Must be 'A*' or 'CSP', but got " + args[3] + " instead.")
 
 
 if __name__ == "__main__":

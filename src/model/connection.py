@@ -1,11 +1,9 @@
 class Connection:
-    from_name: str
-    to_name: str
-    distance: str
-    duration: str
+    to: int
+    distance: int
+    duration: int
 
-    def __init__(self, from_: str, to: str, distance: str, duration: str):
-        self.from_name = from_
-        self.to_name = to
+    def __init__(self, to: int, distance: int, duration: int):
+        self.to = to
         self.distance = distance
         self.duration = duration
