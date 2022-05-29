@@ -13,8 +13,7 @@ def main():
     num_args: int = len(args)
 
     if num_args < 4:
-        raise Exception(f'ERROR. Invalid number of arguments: expected at least 4 but got {num_args} instead.'.format(
-            num_args=num_args))
+        raise Exception(f'ERROR. Invalid number of arguments: expected at least 4 but got {num_args} instead.')
 
     cities = parse_json_dataset(args[0])
 

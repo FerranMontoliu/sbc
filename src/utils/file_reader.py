@@ -22,7 +22,7 @@ def parse_json_dataset(file_path: str) -> ([City], [Connection]):
                         index_from = index
                     if item.name == connection['to']:
                         index_to = index
-                cities.__getitem__(index_from).append_connection(
+                cities[index_from].append_connection(
                     Connection(index_to, connection['distance'], connection['duration']))
 
             print("The dataset was parsed successfully.")
