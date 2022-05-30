@@ -11,7 +11,7 @@ from utils.graph_printer import print_graph
 
 
 def compute(cities: [City],
-            algorithm: Literal['A*', 'CSP'],
+            algorithm: str,
             from_city: str,
             to_city: str,
             heuristic_function: Callable[[Connection], float | int]) -> ([City], float):
