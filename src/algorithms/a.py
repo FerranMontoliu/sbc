@@ -23,10 +23,7 @@ def compute_a(cities: [City],
 
     while node_list:
         # Check if the city was not already visited. Discard otherwise
-        while len(node_list) > 0:
-            node = node_list.pop(0)
-            if not is_visited(node.path, node.city):
-                break
+        node = node_list.pop(0)
 
         if node:
             acc_weight = node.acc_weight
@@ -44,7 +41,18 @@ def compute_a(cities: [City],
 
         # Sort list on every iteration to have an ordered list
         node_list.sort(key=lambda x: x.acc_weight)
+        # Delete duplicates that are less optimal
+        node_list = list(filter(lambda n: not duplicate(n, node_list), node_list))
     return None, None
+
+
+# Check for duplicates previous as the one found
+def duplicate(node: AnnotatedCity, list: [AnnotatedCity]) -> bool:
+    index = list.index(node)
+    for i in range(0, index):
+        if list[i].city.name == node.city.name:
+            return True
+    return False
 
 
 # Check if the item is in the list or not
