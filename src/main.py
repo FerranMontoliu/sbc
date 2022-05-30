@@ -11,17 +11,17 @@ from utils.graph_printer import print_graph
 
 
 def compute(cities: [City],
-            algorithm: Literal['a', 'csp'],
+            algorithm: Literal['a*', 'csp'],
             from_city: str,
             to_city: str,
             heuristic_function: Callable[[Connection], float | int]) -> ([City], float):
     print('Computing algorithm...')
-    if algorithm == 'a':
+    if algorithm == 'a*':
         path, acc_weight = compute_a(cities, from_city, to_city, heuristic_function)
     elif algorithm == 'csp':
         path, acc_weight = compute_csp(cities, from_city, to_city, heuristic_function)
     else:
-        raise Exception(f"ERROR. Invalid algorithm parameter: Must be 'a' or 'csp', but got '{algorithm}' instead.")
+        raise Exception(f"ERROR. Invalid algorithm parameter: Must be 'a*' or 'csp', but got '{algorithm}' instead.")
     print('Search finished.')
 
     print(f"The best route found is: {[c.name for c in path]}.")
@@ -55,8 +55,8 @@ def parse_arguments() -> ArgumentParser:
                         '--algorithm',
                         dest='algorithm',
                         metavar='algorithm',
-                        choices=['a', 'csp'],
-                        help="Name of the algorithm. Choices: ['a', 'csp'].",
+                        choices=['a*', 'csp'],
+                        help="Name of the algorithm. Choices: ['a*', 'csp'].",
                         required=True)
 
     parser.add_argument('-p',
