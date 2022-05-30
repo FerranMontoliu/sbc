@@ -68,13 +68,13 @@ def parse_arguments() -> ArgumentParser:
 
 
 def main():
-    def hf_distance(c: Connection) -> int:
+    def hf_distance(c: Connection, path: [City]) -> int:
         return c.distance
 
-    def hf_duration(c: Connection) -> int:
+    def hf_duration(c: Connection, path: [City]) -> int:
         return c.duration
 
-    def hf_duration_distance(c: Connection) -> int:
+    def hf_duration_distance(c: Connection, path: [City]) -> int:
         return c.duration * c.distance
 
     parser = parse_arguments()

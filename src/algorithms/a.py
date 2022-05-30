@@ -8,7 +8,7 @@ from model.connection import Connection
 def compute_a(cities: [City],
               from_city_name: str,
               to_city_name: str,
-              value_getter: Callable[[Connection], float | int]) -> ([City], float):
+              value_getter: Callable[[Connection, [City]], float | int]) -> ([City], float):
     node_list: [AnnotatedCity]
     acc_weight: float = 0
     node: AnnotatedCity | None = None
@@ -37,7 +37,7 @@ def compute_a(cities: [City],
             path_aux = node.path.copy()
             node_list.append(
                 AnnotatedCity(cities[connection.to], path_aux + [node.city],
-                              acc_weight + value_getter(connection)))
+                              acc_weight + value_getter(connection, node.path)))
 
         # Sort list on every iteration to have an ordered list
         node_list.sort(key=lambda x: x.acc_weight)
