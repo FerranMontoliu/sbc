@@ -3,6 +3,7 @@ from typing import Callable, Literal
 
 from algorithms.a import compute_a
 from algorithms.csp import compute_csp
+from algorithms.dijkstra import compute_dijkstra
 from model.city import City
 from model.connection import Connection
 from utils.error_manager import check_data_validity
@@ -20,12 +21,17 @@ def compute(cities: [City],
         path, acc_weight = compute_a(cities, from_city, to_city, heuristic_function)
     elif algorithm == 'csp':
         path, acc_weight = compute_csp(cities, from_city, to_city, heuristic_function)
+    elif algorithm == 'dijkstra':
+        solution = compute_dijkstra(cities, from_city, heuristic_function)
     else:
         raise Exception(f"ERROR. Invalid algorithm parameter: Must be 'a*' or 'csp', but got '{algorithm}' instead.")
     print('Search finished.')
 
-    print(f"The best route found is: {[c.name for c in path]}.")
-    print(f"With a cost of {acc_weight}.")
+    if path:
+        print(f"The best route found is: {[c.name for c in path]}.")
+        print(f"With a cost of {acc_weight}.")
+    else:
+        print(f"The solutions are the following: {solution}")
 
 
 def parse_arguments() -> ArgumentParser:
@@ -55,8 +61,8 @@ def parse_arguments() -> ArgumentParser:
                         '--algorithm',
                         dest='algorithm',
                         metavar='algorithm',
-                        choices=['a*', 'csp'],
-                        help="Name of the algorithm. Choices: ['a*', 'csp'].",
+                        choices=['a*', 'csp', 'dijkstra'],
+                        help="Name of the algorithm. Choices: ['a*', 'csp', 'dijkstra'].",
                         required=True)
 
     parser.add_argument('-p',
@@ -68,22 +74,22 @@ def parse_arguments() -> ArgumentParser:
 
 
 def main():
-    def hf_distance(c: Connection, path: [City]) -> float:
+    def hf_distance(c: Connection, path: [City] = None) -> float:
         if path and cities[c.to_id].name == path[-1].name:
             return float('inf')
         return c.distance
 
-    def hf_duration(c: Connection, path: [City]) -> float:
+    def hf_duration(c: Connection, path: [City] = None) -> float:
         if path and cities[c.to_id].name == path[-1].name:
             return float('inf')
         return c.duration
 
-    def hf_duration_distance(c: Connection, path: [City]) -> float:
+    def hf_duration_distance(c: Connection, path: [City] = None) -> float:
         if path and cities[c.to_id].name == path[-1].name:
             return float('inf')
         return c.duration * c.distance
 
-    def hf_weighted_duration_distance(c: Connection, path: [City]) -> float:
+    def hf_weighted_duration_distance(c: Connection, path: [City] = None) -> float:
         if path and cities[c.to_id].name == path[-1].name:
             return float('inf')
         return 0.7 * c.duration + 0.3 * c.distance
