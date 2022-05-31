@@ -7,7 +7,7 @@ from model.connection import Connection
 
 def compute_dijkstra(cities: [City],
                      from_city_name: str,
-                     value_getter: Callable[[Connection, [City]], float | int]) -> dict[str, float]:
+                     value_getter: Callable[[City, Connection, [City]], float | int]) -> dict[str, float]:
     visited: [str] = []
 
     search_space = {city.name: float('inf') for city in cities}
@@ -25,7 +25,7 @@ def compute_dijkstra(cities: [City],
             neighbor: City = cities[connection.to_id]
 
             if neighbor.name not in visited:
-                new_cost: float = search_space[current_city.name] + value_getter(connection)
+                new_cost: float = search_space[current_city.name] + value_getter(neighbor, connection)
                 if new_cost < search_space[neighbor.name]:
                     pq.put((new_cost, neighbor))
                     search_space[neighbor.name] = new_cost

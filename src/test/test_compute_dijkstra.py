@@ -1,35 +1,10 @@
 import unittest
 
 from algorithms.dijkstra import compute_dijkstra
-from model.city import City
-from model.connection import Connection
 from utils.file_reader import parse_json_dataset
+from utils.heuristics import hf_distance, hf_duration, hf_duration_distance, hf_weighted_duration_distance
 
 cities = parse_json_dataset('../../assets/dataset.json')
-
-
-def hf_distance(c: Connection, path: [City] = None) -> float:
-    if path and cities[c.to_id].name == path[-1].name:
-        return float('inf')
-    return c.distance
-
-
-def hf_duration(c: Connection, path: [City] = None) -> float:
-    if path and cities[c.to_id].name == path[-1].name:
-        return float('inf')
-    return c.duration
-
-
-def hf_duration_distance(c: Connection, path: [City] = None) -> float:
-    if path and cities[c.to_id].name == path[-1].name:
-        return float('inf')
-    return c.duration * c.distance
-
-
-def hf_weighted_duration_distance(c: Connection, path: [City] = None) -> float:
-    if path and cities[c.to_id].name == path[-1].name:
-        return float('inf')
-    return 0.7 * c.duration + 0.3 * c.distance
 
 
 class TestComputeDijkstra(unittest.TestCase):
