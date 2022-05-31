@@ -1,10 +1,8 @@
-from model.connection import Connection
+from model.city import City
 
 
 class CSPNode:
-    cost_from: float
+    city: City
 
-    def __init__(self, city):
+    def __init__(self, city: City):
         self.city = city
-        self.possible_connections = []
-
