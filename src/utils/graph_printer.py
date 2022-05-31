@@ -10,7 +10,7 @@ def print_graph(cities: [City]) -> None:
 
     for city in cities:
         for connection in city.connections:
-            graphviz_str += f'\t"{city.name}" -> "{cities[connection.to].name}"\t[label="Distance: {connection.distance}\\n Duration: {connection.duration}"];\n'
+            graphviz_str += f'\t"{city.name}" -> "{cities[connection.to_id].name}"\t[label="Distance: {connection.distance}\\n Duration: {connection.duration}"];\n'
 
     graphviz_str += '}'
     source: Source = Source(source=graphviz_str,

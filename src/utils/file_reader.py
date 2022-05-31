@@ -4,17 +4,17 @@ from model.city import City
 from model.connection import Connection
 
 
-def parse_json_dataset(file_path: str) -> ([City], [Connection]):
+def parse_json_dataset(file_path: str) -> [City]:
     print(f"Reading file in '{file_path}'...")
     try:
         with open(file_path, "r", encoding='utf-8') as file:
             info_dict = json.load(file)
 
-            # Converting the cities to class
+            # Converting the cities to_id class
             cities: [City] = [City(**city) for city in info_dict['cities']]
 
-            # Converting the connections to class
-            # With the connections we need to do a little hack because of the 'from' reserved word
+            # Converting the connections to_id class
+            # With the connections we need to_id do a little hack because of the 'from' reserved word
             for connection in info_dict['connections']:
                 index_from = index_to = -1
                 for index, item in enumerate(cities):

@@ -68,14 +68,25 @@ def parse_arguments() -> ArgumentParser:
 
 
 def main():
-    def hf_distance(c: Connection, path: [City]) -> int:
+    def hf_distance(c: Connection, path: [City]) -> float:
+        if path and cities[c.to_id].name == path[-1].name:
+            return float('inf')
         return c.distance
 
-    def hf_duration(c: Connection, path: [City]) -> int:
+    def hf_duration(c: Connection, path: [City]) -> float:
+        if path and cities[c.to_id].name == path[-1].name:
+            return float('inf')
         return c.duration
 
-    def hf_duration_distance(c: Connection, path: [City]) -> int:
+    def hf_duration_distance(c: Connection, path: [City]) -> float:
+        if path and cities[c.to_id].name == path[-1].name:
+            return float('inf')
         return c.duration * c.distance
+
+    def hf_weighted_duration_distance(c: Connection, path: [City]) -> float:
+        if path and cities[c.to_id].name == path[-1].name:
+            return float('inf')
+        return 0.7 * c.duration + 0.3 * c.distance
 
     parser = parse_arguments()
 
